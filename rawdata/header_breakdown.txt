@@ -1,0 +1,28 @@
+ANIMAL
+ID - A412797
+Animal_Name - unknown
+Animal_Type - CAT
+Breed - SIAMESE
+Color - BLACK/BLACK
+Sex - female
+Animal_Size - kittn
+Date Of Birth - unknown
+
+ANIMAL INTAKE
+Impound_Number - K22-042204
+Kennel_Number - CS05
+Animal_ID - A412797
+Intake_Date - 08/08/2022
+Outcome_Date - 08/09/2022
+Days_in_Shelter - 1
+Intake_Type - stray
+Intake Subtype - field
+Outcome_Type - transfer
+Outcome_Subtype - forgotten
+Intake_Condition - treatable / rehab
+Outcome_Condition - treatable / rehab
+Intake_Jurisdiction - santa rosa 
+Outcome_Jurisdiction = santa rosa
+Location - "95403(38.486997, -122.749134)"
+Animal_Count - 1
+ZipCode - 95403
