@@ -10,6 +10,7 @@ import (
 	"time"
 
 	sq "github.com/Masterminds/squirrel"
+	"github.com/gorilla/mux"
 	"github.com/gorilla/schema"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
@@ -32,10 +33,13 @@ func main() {
 
 	animalController := AnimalController{DB: sqlxDb}
 
+	r := mux.NewRouter()
+	r.HandleFunc("/v1/go-animals", animalController.GetAnimals)
+
 	envPort := os.Getenv("PORT")
 	port := fmt.Sprintf(":%s", envPort)
 	http.HandleFunc("/v1/go-animals", animalController.GetAnimals)
-	if err := http.ListenAndServe(port, nil); err != nil {
+	if err := http.ListenAndServe(port, r); err != nil {
 		log.Fatalln("server crashed", err)
 	}
 }

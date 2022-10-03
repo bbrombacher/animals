@@ -13,6 +13,7 @@ require (
 
 require (
 	github.com/gammazero/deque v0.2.0 // indirect
+	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/lann/builder v0.0.0-20180802200727-47ae307949d0 // indirect
 	github.com/lann/ps v0.0.0-20150810152359-62de8c46ede0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
