@@ -26,12 +26,12 @@ func main() {
 	s1 := rand.NewSource(time.Now().UnixNano())
 	r1 := rand.New(s1)
 
-	url := expressBaseURL + expressEndpoint
-	//url := goBaseURL + goEndpoint
+	//url := expressBaseURL + expressEndpoint
+	url := goBaseURL + goEndpoint
 
 	wp := workerpool.New(50)
 	start := time.Now()
-	loops := 50000
+	loops := 20000
 	httpErrs := make([]error, 0, 100)
 	badResponse := make([]map[string]interface{}, 0, 100)
 	nilRepsonse := make([]map[string]interface{}, 0, 100)

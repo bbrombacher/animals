@@ -72,7 +72,7 @@ type AnimalController struct {
 func (a AnimalController) GetAnimals(w http.ResponseWriter, req *http.Request) {
 	ctx := req.Context()
 
-	limit := req.URL.Query().Get("id")
+	limit := req.URL.Query().Get("limit")
 	limitInt, err := strconv.Atoi(limit)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -86,7 +86,8 @@ func (a AnimalController) GetAnimals(w http.ResponseWriter, req *http.Request) {
 		limitInt = 100
 	}
 
-	selectQuery := sq.Select("*").
+	selectQuery := sq.
+		Select("*").
 		From("animals").
 		//Where(sq.GtOrEq{"cursor_id": params.Cursor}).
 		Limit(uint64(limitInt))
