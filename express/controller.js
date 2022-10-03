@@ -30,7 +30,6 @@ app.listen(port);
 console.log('listening on port ' + port);
 
 function getAnimals(req, res) {
-
     let limit = req.query.limit
     let query = `select * from animals limit ${limit}`
    
