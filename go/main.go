@@ -31,8 +31,11 @@ func main() {
 	sqlxDb := sqlx.NewDb(sqldb, "postgres")
 
 	animalController := AnimalController{DB: sqlxDb}
+
+	envPort := os.Getenv("PORT")
+	port := fmt.Sprintf(":%s", envPort)
 	http.HandleFunc("/v1/go-animals", animalController.GetAnimals)
-	if err := http.ListenAndServe(":3000", nil); err != nil {
+	if err := http.ListenAndServe(port, nil); err != nil {
 		log.Fatalln("server crashed", err)
 	}
 }
