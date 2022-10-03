@@ -36,9 +36,11 @@ func main() {
 	sqlxDb.SetMaxIdleConns(10)
 
 	animalController := AnimalController{DB: sqlxDb}
+	debugController := Debug{DB: sqlxDb}
 
 	r := mux.NewRouter()
 	r.HandleFunc("/v1/go-animals", animalController.GetAnimals)
+	r.HandleFunc("/v1/debug", debugController.GetDBStats)
 
 	envPort := os.Getenv("PORT")
 	port := fmt.Sprintf(":%s", envPort)
