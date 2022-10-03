@@ -101,9 +101,19 @@ func (a AnimalController) GetAnimals(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	conn, err := a.DB.Connx(ctx)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"error": fmt.Sprintf("failed to open connection %v", err.Error()),
+		})
+		return
+	}
+	defer conn.Close()
+
 	start := time.Now()
 	var result []DbResponse
-	err = a.DB.SelectContext(ctx, &result, sqlQuery, args...)
+	err = conn.SelectContext(ctx, &result, sqlQuery, args...)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(map[string]interface{}{

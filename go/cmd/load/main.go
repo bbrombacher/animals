@@ -29,7 +29,7 @@ func main() {
 	//url := expressBaseURL + expressEndpoint
 	url := goBaseURL + goEndpoint
 
-	wp := workerpool.New(50)
+	wp := workerpool.New(100)
 	start := time.Now()
 	loops := 20000
 	httpErrs := make([]error, 0, 100)
