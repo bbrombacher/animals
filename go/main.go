@@ -21,7 +21,7 @@ func main() {
 	// init db
 	dbURL := localDB
 	if os.Getenv("ENV") == "server" {
-		dbURL = os.Getenv("DB_URL")
+		dbURL = os.Getenv("DATABASE_URL")
 	}
 
 	sqldb, err := goSql.Open("postgres", dbURL)

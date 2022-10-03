@@ -20,11 +20,12 @@ var localDB = "postgres://pguser:pgpass@localhost:9001/shelters?sslmode=disable"
 
 func main() {
 
-	// init db
-	dbURL := localDB
-	if os.Getenv("ENV") == "server" {
-		dbURL = os.Getenv("DB_URL")
+	dbURL := os.Getenv("db_url")
+	if dbURL == "" {
+		dbURL = localDB
 	}
+
+	log.Println("url set", dbURL)
 
 	sqldb, err := goSql.Open("postgres", dbURL)
 	if err != nil {
