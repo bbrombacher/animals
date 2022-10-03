@@ -21,17 +21,23 @@ func main() {
 
 	url := baseServerUrl
 
-	wp := workerpool.New(10)
-	for i := 0; i < 100; i++ {
+	wp := workerpool.New(1)
+	start := time.Now()
+	loops := 5000
+	for i := 0; i < loops; i++ {
 		wp.Submit(func() {
-			limit := r1.Intn(10000)
-			response := makeRequest(limit, url+endpoint)
-			if response != nil {
-				log.Println("response size: ", len(response["animals"].([]interface{})))
-			}
+			limit := r1.Intn(1000)
+			reqStart := time.Now()
+			makeRequest(limit, url+endpoint)
+			log.Println("elapsed: ", time.Since(reqStart))
 		})
 	}
+	log.Println("bloop")
 	wp.StopWait()
+
+	elapsed := time.Since(start)
+	rps := loops / int(elapsed.Seconds())
+	log.Println("rps: ", rps)
 }
 
 func makeRequest(limit int, url string) map[string]interface{} {
