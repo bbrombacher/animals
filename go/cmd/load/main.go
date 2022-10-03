@@ -103,7 +103,7 @@ func (b *Buckets) BucketTime(time string) {
 	case timeInt > 500 && timeInt <= 1000:
 		b.Bucks["501-1000"]++
 	case timeInt > 1000 && timeInt <= 1500:
-		b.Bucks["1000-1500"]++
+		b.Bucks["1001-1500"]++
 	case timeInt > 1500:
 		b.Bucks["1501++"]++
 	default:
@@ -112,7 +112,7 @@ func (b *Buckets) BucketTime(time string) {
 }
 
 func (b *Buckets) String() {
-	order := []string{"0-50", "51-200", "201-500", "501-1000", "1000-1500", "1501++", "uncategorized"}
+	order := []string{"0-50", "51-200", "201-500", "501-1000", "1001-1500", "1501++", "uncategorized"}
 	for _, key := range order {
 		log.Println(key, b.Bucks[key])
 	}

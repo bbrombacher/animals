@@ -32,7 +32,6 @@ func main() {
 	}
 	defer sqldb.Close()
 	sqlxDb := sqlx.NewDb(sqldb, "postgres")
-
 	sqlxDb.SetMaxOpenConns(10)
 	sqlxDb.SetMaxIdleConns(10)
 
@@ -128,6 +127,18 @@ func (a AnimalController) GetAnimals(w http.ResponseWriter, req *http.Request) {
 		"animals": result,
 	}
 
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(resp)
+}
+
+type Debug struct {
+	DB *sqlx.DB
+}
+
+func (d Debug) GetDBStats(w http.ResponseWriter, req *http.Request) {
+	resp := map[string]interface{}{
+		"db_stats": d.DB.Stats(),
+	}
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(resp)
 }
