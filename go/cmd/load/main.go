@@ -32,7 +32,7 @@ func main() {
 	//url := expressBaseURL + expressEndpoint
 	url := goBaseURL + goEndpoint
 
-	wp := workerpool.New(500)
+	wp := workerpool.New(5)
 	start := time.Now()
 	loops := 20000
 	httpErrs := make([]error, 0, 100)

@@ -34,6 +34,8 @@ func main() {
 	sqlxDb := sqlx.NewDb(sqldb, "postgres")
 	sqlxDb.SetMaxOpenConns(10)
 	sqlxDb.SetMaxIdleConns(3)
+	sqlxDb.SetConnMaxIdleTime(time.Duration(300) * time.Second)
+	sqlxDb.SetConnMaxLifetime(time.Duration(1) * time.Hour)
 
 	animalController := AnimalController{DB: sqlxDb}
 	debugController := Debug{DB: sqlxDb}
