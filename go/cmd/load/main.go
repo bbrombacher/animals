@@ -32,11 +32,11 @@ func main() {
 	//url := expressBaseURL + expressEndpoint
 	url := goBaseURL + goEndpoint
 
-	wp := workerpool.New(200)
+	wp := workerpool.New(500)
 	start := time.Now()
 	loops := 20000
 	httpErrs := make([]error, 0, 100)
-	badResponse := make([]map[string]interface{}, 0, 100)
+	//	badResponse := make([]map[string]interface{}, 0, 100)
 	nilRepsonse := make([]map[string]interface{}, 0, 100)
 
 	buckets := Buckets{
@@ -46,7 +46,7 @@ func main() {
 
 	for i := 0; i < loops; i++ {
 		wp.Submit(func() {
-			limit := r1.Intn(300)
+			limit := r1.Intn(100)
 			limit++
 			reqStart := time.Now()
 			resp, err := makeRequest(limit, url)
@@ -74,9 +74,11 @@ func main() {
 	elapsed := time.Since(start)
 	rps := loops / int(elapsed.Seconds())
 	log.Println("rps: ", rps)
-	log.Println("error count:", len(httpErrs))
-	log.Println("bad response count:", len(badResponse))
-	log.Println("nil response count:", len(nilRepsonse))
+	/*
+		log.Println("error count:", len(httpErrs))
+		log.Println("bad response count:", len(badResponse))
+		log.Println("nil response count:", len(nilRepsonse))
+	*/
 	for key, value := range buckets.Bucks {
 		log.Println("key, value", key, value)
 	}
