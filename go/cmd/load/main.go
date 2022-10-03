@@ -29,8 +29,8 @@ func main() {
 	s1 := rand.NewSource(time.Now().UnixNano())
 	r1 := rand.New(s1)
 
-	url := expressBaseURL + expressEndpoint
-	//url := goBaseURL + goEndpoint
+	//url := expressBaseURL + expressEndpoint
+	url := goBaseURL + goEndpoint
 
 	wp := workerpool.New(200)
 	start := time.Now()
@@ -46,7 +46,7 @@ func main() {
 
 	for i := 0; i < loops; i++ {
 		wp.Submit(func() {
-			limit := r1.Intn(100)
+			limit := r1.Intn(300)
 			limit++
 			reqStart := time.Now()
 			resp, err := makeRequest(limit, url)
