@@ -30,6 +30,7 @@ func main() {
 	if err != nil {
 		log.Fatalln("error opening sql", err.Error())
 	}
+	defer sqldb.Close()
 	sqlxDb := sqlx.NewDb(sqldb, "postgres")
 
 	animalController := AnimalController{DB: sqlxDb}
@@ -100,6 +101,7 @@ func (a AnimalController) GetAnimals(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	start := time.Now()
 	var result []DbResponse
 	err = a.DB.SelectContext(ctx, &result, sqlQuery, args...)
 	if err != nil {
@@ -109,6 +111,8 @@ func (a AnimalController) GetAnimals(w http.ResponseWriter, req *http.Request) {
 		})
 		return
 	}
+
+	log.Println("elapsed db:", time.Since(start))
 
 	resp := map[string]interface{}{
 		"animals": result,
