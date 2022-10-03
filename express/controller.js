@@ -38,6 +38,7 @@ function getAnimals(req, res) {
         res.json({ animals: data });
     }) 
     .catch((error) => {
+        res.status(500)
         res.json({ error: error })
     })
  }
