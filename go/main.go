@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	sq "github.com/Masterminds/squirrel"
@@ -71,35 +72,24 @@ type AnimalController struct {
 func (a AnimalController) GetAnimals(w http.ResponseWriter, req *http.Request) {
 	ctx := req.Context()
 
-	params := GetAnimalsParams{}
-
-	err := req.ParseForm()
+	limit := req.URL.Query().Get("id")
+	limitInt, err := strconv.Atoi(limit)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]interface{}{
-			"error": fmt.Sprintf("failed to parse request %v", err.Error()),
+			"error": fmt.Sprintf("failed to parse query parameters %v", err.Error()),
 		})
 		return
 	}
 
-	err = decoder.Decode(&params, req.Form)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]interface{}{
-			"error": fmt.Sprintf("failed to decode request %v", err.Error()),
-		})
-		return
-	}
-
-	limit := params.Limit
-	if limit == 0 {
-		limit = 100
+	if limitInt == 0 {
+		limitInt = 100
 	}
 
 	selectQuery := sq.Select("*").
 		From("animals").
 		//Where(sq.GtOrEq{"cursor_id": params.Cursor}).
-		Limit(uint64(limit))
+		Limit(uint64(limitInt))
 	sqlQuery, args, err := selectQuery.PlaceholderFormat(sq.Dollar).ToSql()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)

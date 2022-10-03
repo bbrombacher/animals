@@ -29,44 +29,62 @@ func main() {
 	//url := expressBaseURL + expressEndpoint
 	url := goBaseURL + goEndpoint
 
-	wp := workerpool.New(200)
+	wp := workerpool.New(50)
 	start := time.Now()
-	loops := 5000
+	loops := 50000
+	httpErrs := make([]error, 0, 100)
+	badResponse := make([]map[string]interface{}, 0, 100)
+	nilRepsonse := make([]map[string]interface{}, 0, 100)
+
 	for i := 0; i < loops; i++ {
 		wp.Submit(func() {
 			limit := r1.Intn(100)
+			limit++
 			reqStart := time.Now()
-			makeRequest(limit, url)
-			log.Println("elapsed: ", time.Since(reqStart))
+			resp, err := makeRequest(limit, url)
+			if err != nil {
+				httpErrs = append(httpErrs, err)
+				log.Fatalln("error getting data", err)
+			}
+
+			elapsed := time.Since(reqStart)
+			if resp != nil {
+				animals, ok := resp["animals"].([]interface{})
+				if ok {
+					log.Println("len of animals:", len(animals), elapsed)
+				}
+			} else {
+				nilRepsonse = append(nilRepsonse, resp)
+			}
 		})
 	}
-	log.Println("bloop")
 	wp.StopWait()
 
 	elapsed := time.Since(start)
 	rps := loops / int(elapsed.Seconds())
 	log.Println("rps: ", rps)
+	log.Println("error count:", len(httpErrs))
+	log.Println("bad response count:", len(badResponse))
+	log.Println("nil response count:", len(nilRepsonse))
 }
 
-func makeRequest(limit int, url string) map[string]interface{} {
+func makeRequest(limit int, url string) (map[string]interface{}, error) {
 
 	resp, err := http.DefaultClient.Get(fmt.Sprintf(url, limit))
 	if err != nil {
-		log.Println("err:", err)
-		return nil
+		return nil, err
 	}
 
 	if resp.StatusCode > 299 {
-		log.Println("bad status code", resp.StatusCode)
-		return nil
+		return nil, fmt.Errorf("bad status code %v", resp.StatusCode)
 	}
 
-	var response map[string]interface{}
+	response := map[string]interface{}{}
 	err = json.NewDecoder(resp.Body).Decode(&response)
 	if err != nil {
 		log.Println("faield to decode body")
-		return nil
+		return nil, err
 	}
 
-	return response
+	return response, nil
 }
