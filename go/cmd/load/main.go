@@ -29,8 +29,8 @@ func main() {
 	s1 := rand.NewSource(time.Now().UnixNano())
 	r1 := rand.New(s1)
 
-	//url := expressBaseURL + expressEndpoint
-	url := goBaseURL + goEndpoint
+	url := expressBaseURL + expressEndpoint
+	//url := goBaseURL + goEndpoint
 
 	wp := workerpool.New(200)
 	start := time.Now()
