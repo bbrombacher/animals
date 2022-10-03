@@ -113,7 +113,6 @@ func (a AnimalController) GetAnimals(w http.ResponseWriter, req *http.Request) {
 	}
 	defer conn.Close()
 
-	start := time.Now()
 	var result []DbResponse
 	err = conn.SelectContext(ctx, &result, sqlQuery, args...)
 	if err != nil {
@@ -123,8 +122,6 @@ func (a AnimalController) GetAnimals(w http.ResponseWriter, req *http.Request) {
 		})
 		return
 	}
-
-	log.Println("elapsed db:", time.Since(start))
 
 	resp := map[string]interface{}{
 		"animals": result,
