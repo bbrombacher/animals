@@ -29,14 +29,14 @@ func main() {
 	s1 := rand.NewSource(time.Now().UnixNano())
 	r1 := rand.New(s1)
 
-	//url := expressBaseURL + expressEndpoint
-	url := goBaseURL + goEndpoint
+	url := expressBaseURL + expressEndpoint
+	//url := goBaseURL + goEndpoint
 
 	wp := workerpool.New(500)
 	start := time.Now()
 	loops := 20000
 	httpErrs := make([]error, 0, 100)
-	//	badResponse := make([]map[string]interface{}, 0, 100)
+	//badResponse := make([]map[string]interface{}, 0, 100)
 	nilRepsonse := make([]map[string]interface{}, 0, 100)
 
 	buckets := Buckets{
@@ -79,9 +79,7 @@ func main() {
 		log.Println("bad response count:", len(badResponse))
 		log.Println("nil response count:", len(nilRepsonse))
 	*/
-	for key, value := range buckets.Bucks {
-		log.Println("key, value", key, value)
-	}
+	buckets.String()
 }
 
 type Buckets struct {
@@ -96,18 +94,27 @@ func (b *Buckets) BucketTime(time string) {
 	defer b.Mu.Unlock()
 
 	switch {
-	case timeInt < 1 && timeInt < 50:
-		b.Bucks["0_to_50"]++
-	case timeInt < 51 && timeInt < 200:
-		b.Bucks["51_to_200"]++
-	case timeInt < 201 && timeInt < 500:
-		b.Bucks["201_to_500"]++
-	case timeInt < 501 && timeInt < 1000:
-		b.Bucks["500_to_1000"]++
-	case timeInt < 1001 && timeInt < 1500:
-		b.Bucks["1000_to_1500"]++
+	case timeInt > 0 && timeInt <= 50:
+		b.Bucks["0-50"]++
+	case timeInt > 50 && timeInt <= 200:
+		b.Bucks["51-200"]++
+	case timeInt > 200 && timeInt <= 500:
+		b.Bucks["201-500"]++
+	case timeInt > 500 && timeInt <= 1000:
+		b.Bucks["501-1000"]++
+	case timeInt > 1000 && timeInt <= 1500:
+		b.Bucks["1000-1500"]++
+	case timeInt > 1500:
+		b.Bucks["1501++"]++
 	default:
 		b.Bucks["uncategorized"]++
+	}
+}
+
+func (b *Buckets) String() {
+	order := []string{"0-50", "51-200", "201-500", "501-1000", "1000-1500", "1501++", "uncategorized"}
+	for _, key := range order {
+		log.Println(key, b.Bucks[key])
 	}
 }
 
