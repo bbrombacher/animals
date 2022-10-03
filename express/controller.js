@@ -35,7 +35,7 @@ function getAnimals(req, res) {
    
     db.many(query)
     .then((data) => {
-        res.json({ data: data });
+        res.json({ animals: data });
     }) 
     .catch((error) => {
         res.json({ error: error })

@@ -11,24 +11,32 @@ import (
 	"github.com/gammazero/workerpool"
 )
 
-var endpoint = "/v1/go-animals?limit=%v"
+// local
 var baseLocalUrl = "http://localhost:8080"
-var baseServerUrl = "https://animals-production.up.railway.app"
+
+// express
+var expressEndpoint = "/api/v1/express-animals?limit=%v"
+var expressBaseURL = "https://express-animals-production.up.railway.app"
+
+// go
+var goEndpoint = "/v1/go-animals?limit=%v"
+var goBaseURL = "https://animals-production.up.railway.app"
 
 func main() {
 	s1 := rand.NewSource(time.Now().UnixNano())
 	r1 := rand.New(s1)
 
-	url := baseServerUrl
+	//url := expressBaseURL + expressEndpoint
+	url := goBaseURL + goEndpoint
 
-	wp := workerpool.New(1)
+	wp := workerpool.New(200)
 	start := time.Now()
 	loops := 5000
 	for i := 0; i < loops; i++ {
 		wp.Submit(func() {
-			limit := r1.Intn(1000)
+			limit := r1.Intn(100)
 			reqStart := time.Now()
-			makeRequest(limit, url+endpoint)
+			makeRequest(limit, url)
 			log.Println("elapsed: ", time.Since(reqStart))
 		})
 	}
