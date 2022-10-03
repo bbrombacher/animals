@@ -33,7 +33,7 @@ func main() {
 	defer sqldb.Close()
 	sqlxDb := sqlx.NewDb(sqldb, "postgres")
 	sqlxDb.SetMaxOpenConns(10)
-	sqlxDb.SetMaxIdleConns(10)
+	sqlxDb.SetMaxIdleConns(3)
 
 	animalController := AnimalController{DB: sqlxDb}
 	debugController := Debug{DB: sqlxDb}
