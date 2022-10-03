@@ -33,6 +33,8 @@ func main() {
 	defer sqldb.Close()
 	sqlxDb := sqlx.NewDb(sqldb, "postgres")
 
+	sqlxDb.SetMaxOpenConns(100)
+
 	animalController := AnimalController{DB: sqlxDb}
 
 	r := mux.NewRouter()
