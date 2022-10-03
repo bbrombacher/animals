@@ -11,7 +11,7 @@ import (
 	"github.com/gammazero/workerpool"
 )
 
-var endpoint = "/go-animals?limit=%v"
+var endpoint = "/v1/go-animals?limit=%v"
 var baseLocalUrl = "http://localhost:8080"
 var baseServerUrl = "https://animals-production.up.railway.app"
 

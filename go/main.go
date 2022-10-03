@@ -31,8 +31,8 @@ func main() {
 	sqlxDb := sqlx.NewDb(sqldb, "postgres")
 
 	animalController := AnimalController{DB: sqlxDb}
-	http.HandleFunc("/go-animals", animalController.GetAnimals)
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+	http.HandleFunc("/v1/go-animals", animalController.GetAnimals)
+	if err := http.ListenAndServe(":3000", nil); err != nil {
 		log.Fatalln("server crashed", err)
 	}
 }
